@@ -1,0 +1,545 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Publishing Company Wiki</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 40px;
+            color: white;
+        }
+
+        .header h1 {
+            font-size: 3rem;
+            font-weight: 700;
+            margin-bottom: 10px;
+            text-shadow: 0 2px 10px rgba(0,0,0,0.3);
+        }
+
+        .header p {
+            font-size: 1.2rem;
+            opacity: 0.9;
+        }
+
+        .login-section {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 40px;
+            margin-bottom: 40px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            text-align: center;
+            border: 1px solid rgba(255,255,255,0.2);
+        }
+
+        .login-form {
+            max-width: 400px;
+            margin: 0 auto;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+            text-align: left;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: #333;
+        }
+
+        .form-group input {
+            width: 100%;
+            padding: 12px 16px;
+            border: 2px solid #e0e0e0;
+            border-radius: 10px;
+            font-size: 16px;
+            transition: border-color 0.3s ease;
+        }
+
+        .form-group input:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+
+        .login-btn {
+            width: 100%;
+            padding: 14px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            border-radius: 10px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: transform 0.2s ease;
+        }
+
+        .login-btn:hover {
+            transform: translateY(-2px);
+        }
+
+        .main-content {
+            display: none;
+        }
+
+        .wiki-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 30px;
+            margin-bottom: 40px;
+        }
+
+        .wiki-section {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            border: 1px solid rgba(255,255,255,0.2);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            cursor: pointer;
+        }
+
+        .wiki-section:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 30px 60px rgba(0,0,0,0.15);
+        }
+
+        .wiki-section h2 {
+            color: #333;
+            font-size: 1.5rem;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+        }
+
+        .wiki-section .icon {
+            font-size: 2rem;
+            margin-right: 15px;
+        }
+
+        .wiki-section p {
+            color: #666;
+            margin-bottom: 20px;
+        }
+
+        .wiki-section ul {
+            list-style: none;
+        }
+
+        .wiki-section li {
+            padding: 8px 0;
+            color: #555;
+            border-bottom: 1px solid #f0f0f0;
+            transition: color 0.2s ease;
+        }
+
+        .wiki-section li:hover {
+            color: #667eea;
+        }
+
+        .wiki-section li:last-child {
+            border-bottom: none;
+        }
+
+        .search-bar {
+            width: 100%;
+            max-width: 600px;
+            margin: 0 auto 40px auto;
+            position: relative;
+        }
+
+        .search-bar input {
+            width: 100%;
+            padding: 16px 50px 16px 20px;
+            border: none;
+            border-radius: 15px;
+            font-size: 16px;
+            background: rgba(255, 255, 255, 0.9);
+            backdrop-filter: blur(10px);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+        }
+
+        .search-bar input:focus {
+            outline: none;
+            box-shadow: 0 10px 30px rgba(102, 126, 234, 0.3);
+        }
+
+        .search-icon {
+            position: absolute;
+            right: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #999;
+            font-size: 20px;
+        }
+
+        .user-info {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: rgba(255, 255, 255, 0.9);
+            padding: 10px 20px;
+            border-radius: 25px;
+            color: #333;
+            font-weight: 600;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+
+        .logout-btn {
+            margin-left: 15px;
+            background: #ff6b6b;
+            color: white;
+            border: none;
+            padding: 8px 15px;
+            border-radius: 15px;
+            cursor: pointer;
+            font-size: 12px;
+        }
+
+        .content-area {
+            display: none;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 40px;
+            margin-top: 20px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+        }
+
+        .content-area h1 {
+            color: #333;
+            margin-bottom: 20px;
+            border-bottom: 3px solid #667eea;
+            padding-bottom: 10px;
+        }
+
+        .back-btn {
+            background: #6c757d;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 10px;
+            cursor: pointer;
+            margin-bottom: 20px;
+        }
+
+        .back-btn:hover {
+            background: #5a6268;
+        }
+
+        @media (max-width: 768px) {
+            .header h1 {
+                font-size: 2rem;
+            }
+            
+            .wiki-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .container {
+                padding: 10px;
+            }
+
+            .user-info {
+                position: static;
+                margin-bottom: 20px;
+                text-align: center;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>📚 Company Wiki</h1>
+            <p>Your comprehensive internal knowledge base</p>
+        </div>
+
+        <!-- Login Section -->
+        <div class="login-section" id="loginSection">
+            <h2>🔐 Team Access Required</h2>
+            <p style="margin-bottom: 30px;">Please login with your company email to access the wiki</p>
+            <div class="login-form">
+                <div class="form-group">
+                    <label for="email">Company Email</label>
+                    <input type="email" id="email" placeholder="your.name@company.com" required>
+                </div>
+                <div class="form-group">
+                    <label for="password">Password</label>
+                    <input type="password" id="password" placeholder="Enter your password" required>
+                </div>
+                <button class="login-btn" onclick="handleLogin()">Access Wiki</button>
+            </div>
+        </div>
+
+        <!-- Main Content (Hidden by default) -->
+        <div class="main-content" id="mainContent">
+            <div class="user-info" id="userInfo">
+                <span id="userEmail"></span>
+                <button class="logout-btn" onclick="handleLogout()">Logout</button>
+            </div>
+
+            <div class="search-bar">
+                <input type="text" placeholder="Search the wiki..." id="searchInput" onkeyup="searchWiki()">
+                <span class="search-icon">🔍</span>
+            </div>
+
+            <div class="wiki-sections" id="wikiSections">
+                <div class="wiki-grid">
+                    <div class="wiki-section" onclick="showContent('devEnvironment')">
+                        <h2><span class="icon">💻</span>Dev Environment Setup</h2>
+                        <p>Complete guides for setting up development environments</p>
+                        <ul>
+                            <li>Local development setup</li>
+                            <li>IDE configuration</li>
+                            <li>Environment variables</li>
+                            <li>Testing frameworks</li>
+                        </ul>
+                    </div>
+
+                    <div class="wiki-section" onclick="showContent('repositories')">
+                        <h2><span class="icon">📦</span>Repositories & Dependencies</h2>
+                        <p>Source code repositories and dependency management</p>
+                        <ul>
+                            <li>Git repositories overview</li>
+                            <li>Package managers</li>
+                            <li>Dependency updates</li>
+                            <li>Version control guidelines</li>
+                        </ul>
+                    </div>
+
+                    <div class="wiki-section" onclick="showContent('software')">
+                        <h2><span class="icon">🛠️</span>Software & Tools</h2>
+                        <p>Essential software tools and configurations</p>
+                        <ul>
+                            <li>XAMPP setup and usage</li>
+                            <li>MySQL Workbench guides</li>
+                            <li>Development tools</li>
+                            <li>Database management</li>
+                        </ul>
+                    </div>
+
+                    <div class="wiki-section" onclick="showContent('monday')">
+                        <h2><span class="icon">📊</span>Monday.com Boards</h2>
+                        <p>Project management and workflow guides</p>
+                        <ul>
+                            <li>Board templates</li>
+                            <li>Workflow automation</li>
+                            <li>Reporting and analytics</li>
+                            <li>Team collaboration</li>
+                        </ul>
+                    </div>
+
+                    <div class="wiki-section" onclick="showContent('amazon')">
+                        <h2><span class="icon">📚</span>Amazon AMS & KDP</h2>
+                        <p>Amazon advertising and publishing tutorials</p>
+                        <ul>
+                            <li>AMS campaign setup</li>
+                            <li>KDP publishing process</li>
+                            <li>Keyword research</li>
+                            <li>Performance optimization</li>
+                        </ul>
+                    </div>
+
+                    <div class="wiki-section" onclick="showContent('publishing')">
+                        <h2><span class="icon">📖</span>Publishing Workflows</h2>
+                        <p>End-to-end publishing process documentation</p>
+                        <ul>
+                            <li>Content creation guidelines</li>
+                            <li>Editorial workflow</li>
+                            <li>Quality assurance</li>
+                            <li>Distribution channels</li>
+                        </ul>
+                    </div>
+
+                    <div class="wiki-section" onclick="showContent('analytics')">
+                        <h2><span class="icon">📈</span>Analytics & Reporting</h2>
+                        <p>Data analysis and performance tracking</p>
+                        <ul>
+                            <li>Sales reporting</li>
+                            <li>Traffic analysis</li>
+                            <li>ROI calculations</li>
+                            <li>Custom dashboards</li>
+                        </ul>
+                    </div>
+
+                    <div class="wiki-section" onclick="showContent('resources')">
+                        <h2><span class="icon">🎯</span>Resources & Templates</h2>
+                        <p>Downloadable resources and document templates</p>
+                        <ul>
+                            <li>Document templates</li>
+                            <li>Brand guidelines</li>
+                            <li>Contact information</li>
+                            <li>Emergency procedures</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Content Areas (Hidden by default) -->
+            <div class="content-area" id="devEnvironment">
+                <button class="back-btn" onclick="showMain()">← Back to Wiki</button>
+                <h1>💻 Development Environment Setup</h1>
+                <p>This section will contain detailed guides for setting up development environments. Content coming soon...</p>
+            </div>
+
+            <div class="content-area" id="repositories">
+                <button class="back-btn" onclick="showMain()">← Back to Wiki</button>
+                <h1>📦 Repositories & Dependencies</h1>
+                <p>This section will contain information about code repositories and dependency management. Content coming soon...</p>
+            </div>
+
+            <div class="content-area" id="software">
+                <button class="back-btn" onclick="showMain()">← Back to Wiki</button>
+                <h1>🛠️ Software & Tools</h1>
+                <p>This section will contain guides for XAMPP, MySQL Workbench, and other essential tools. Content coming soon...</p>
+            </div>
+
+            <div class="content-area" id="monday">
+                <button class="back-btn" onclick="showMain()">← Back to Wiki</button>
+                <h1>📊 Monday.com Boards</h1>
+                <p>This section will contain Monday.com setup guides and best practices. Content coming soon...</p>
+            </div>
+
+            <div class="content-area" id="amazon">
+                <button class="back-btn" onclick="showMain()">← Back to Wiki</button>
+                <h1>📚 Amazon AMS & KDP</h1>
+                <p>This section will contain comprehensive Amazon advertising and publishing tutorials. Content coming soon...</p>
+            </div>
+
+            <div class="content-area" id="publishing">
+                <button class="back-btn" onclick="showMain()">← Back to Wiki</button>
+                <h1>📖 Publishing Workflows</h1>
+                <p>This section will contain end-to-end publishing process documentation. Content coming soon...</p>
+            </div>
+
+            <div class="content-area" id="analytics">
+                <button class="back-btn" onclick="showMain()">← Back to Wiki</button>
+                <h1>📈 Analytics & Reporting</h1>
+                <p>This section will contain analytics and reporting guides. Content coming soon...</p>
+            </div>
+
+            <div class="content-area" id="resources">
+                <button class="back-btn" onclick="showMain()">← Back to Wiki</button>
+                <h1>🎯 Resources & Templates</h1>
+                <p>This section will contain downloadable resources and templates. Content coming soon...</p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Simple email validation for company domain
+        const COMPANY_DOMAINS = ['@liquidmindmedia.com']; // Add your actual company domains
+        
+        function handleLogin() {
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+            
+            if (!email || !password) {
+                alert('Please fill in all fields');
+                return;
+            }
+            
+            // Simple company email validation
+            const isCompanyEmail = COMPANY_DOMAINS.some(domain => email.toLowerCase().includes(domain));
+            
+            if (!isCompanyEmail) {
+                alert('Please use your company email address');
+                return;
+            }
+            
+            // Store user info (in a real app, this would be handled server-side)
+            sessionStorage.setItem('userEmail', email);
+            sessionStorage.setItem('isLoggedIn', 'true');
+            
+            // Show main content
+            document.getElementById('loginSection').style.display = 'none';
+            document.getElementById('mainContent').style.display = 'block';
+            document.getElementById('userEmail').textContent = email;
+        }
+        
+        function handleLogout() {
+            sessionStorage.removeItem('userEmail');
+            sessionStorage.removeItem('isLoggedIn');
+            
+            document.getElementById('loginSection').style.display = 'block';
+            document.getElementById('mainContent').style.display = 'none';
+            document.getElementById('email').value = '';
+            document.getElementById('password').value = '';
+            showMain();
+        }
+        
+        function showContent(sectionId) {
+            document.getElementById('wikiSections').style.display = 'none';
+            document.querySelectorAll('.content-area').forEach(area => {
+                area.style.display = 'none';
+            });
+            document.getElementById(sectionId).style.display = 'block';
+        }
+        
+        function showMain() {
+            document.getElementById('wikiSections').style.display = 'block';
+            document.querySelectorAll('.content-area').forEach(area => {
+                area.style.display = 'none';
+            });
+        }
+        
+        function searchWiki() {
+            const searchTerm = document.getElementById('searchInput').value.toLowerCase();
+            const sections = document.querySelectorAll('.wiki-section');
+            
+            sections.forEach(section => {
+                const text = section.textContent.toLowerCase();
+                if (text.includes(searchTerm)) {
+                    section.style.display = 'block';
+                } else {
+                    section.style.display = searchTerm ? 'none' : 'block';
+                }
+            });
+        }
+        
+        // Check if user is already logged in
+        window.onload = function() {
+            const isLoggedIn = sessionStorage.getItem('isLoggedIn');
+            const userEmail = sessionStorage.getItem('userEmail');
+            
+            if (isLoggedIn && userEmail) {
+                document.getElementById('loginSection').style.display = 'none';
+                document.getElementById('mainContent').style.display = 'block';
+                document.getElementById('userEmail').textContent = userEmail;
+            }
+        }
+        
+        // Allow Enter key to submit login
+        document.getElementById('password').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                handleLogin();
+            }
+        });
+    </script>
+</body>
+</html>
